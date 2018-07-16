@@ -46,7 +46,8 @@ class ClusterManager extends EventEmitter {
         if (options.webhooks) {
             this.webhooks = {
                 cluster: options.webhooks.cluster,
-                shard: options.webhooks.shard
+                shard: options.webhooks.shard,
+                error: options.webhooks.error
             }
         }
         this.options.debug = options.debug || false;
@@ -58,7 +59,8 @@ class ClusterManager extends EventEmitter {
                     guilds: 0,
                     users: 0,
                     totalRam: 0,
-                    voice: 0,
+                    totalCpu: 0,
+                    totalVoiceConnections: 0,
                     exclusiveGuilds: 0,
                     largeGuilds: 0,
                     clusters: []
@@ -88,8 +90,9 @@ class ClusterManager extends EventEmitter {
             self.stats.stats.guilds = 0;
             self.stats.stats.users = 0;
             self.stats.stats.totalRam = 0;
+            self.stats.stats.totalCpu = 0;
+            self.stats.stats.totalVoiceConnections = 0;
             self.stats.stats.clusters = [];
-            self.stats.stats.voice = 0;
             self.stats.stats.exclusiveGuilds = 0;
             self.stats.stats.largeGuilds = 0;
             self.stats.clustersCounted = 0;
@@ -232,11 +235,14 @@ class ClusterManager extends EventEmitter {
                             cluster: worker.id,
                             shards: message.stats.shards,
                             guilds: message.stats.guilds,
+                            users: message.stats.users,
                             ram: ram,
+                            cpu: message.stats.cpu,
                             voice: message.stats.voice,
                             uptime: message.stats.uptime,
                             exclusiveGuilds: message.stats.exclusiveGuilds,
-                            largeGuilds: message.stats.largeGuilds
+                            largeGuilds: message.stats.largeGuilds,
+                            voiceConnections: message.stats.voiceConnections
                         });
                         this.stats.clustersCounted += 1;
                         if (this.stats.clustersCounted === this.clusters.size) {
@@ -251,10 +257,11 @@ class ClusterManager extends EventEmitter {
                             this.emit("stats", {
                                 guilds: this.stats.stats.guilds,
                                 users: this.stats.stats.users,
-                                voice: this.stats.stats.voice,
                                 exclusiveGuilds: this.stats.stats.exclusiveGuilds,
                                 largeGuilds: this.stats.stats.largeGuilds,
                                 totalRam: this.stats.stats.totalRam / 1000000,
+                                totalCpu: this.stats.stats.totalCpu,
+                                totalVoiceConnections: this.stats.stats.totalVoiceConnections,
                                 clusters: clusters
                             });
                         }
