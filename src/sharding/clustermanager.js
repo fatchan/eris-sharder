@@ -228,6 +228,7 @@ class ClusterManager extends EventEmitter {
                         this.stats.stats.users += message.stats.users;
                         this.stats.stats.voice += message.stats.voice;
                         this.stats.stats.totalRam += message.stats.ram;
+			this.stats.stats.voiceConnections += message.stats.voiceConnections;
                         let ram = message.stats.ram / 1000000;
                         this.stats.stats.exclusiveGuilds += message.stats.exclusiveGuilds;
                         this.stats.stats.largeGuilds += message.stats.largeGuilds;
