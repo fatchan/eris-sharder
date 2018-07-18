@@ -61,8 +61,6 @@ class ClusterManager extends EventEmitter {
                     totalRam: 0,
                     totalCpu: 0,
                     totalVoiceConnections: 0,
-                    exclusiveGuilds: 0,
-                    largeGuilds: 0,
                     clusters: []
                 },
                 clustersCounted: 0
@@ -93,8 +91,6 @@ class ClusterManager extends EventEmitter {
             self.stats.stats.totalCpu = 0;
             self.stats.stats.totalVoiceConnections = 0;
             self.stats.stats.clusters = [];
-            self.stats.stats.exclusiveGuilds = 0;
-            self.stats.stats.largeGuilds = 0;
             self.stats.clustersCounted = 0;
             let clusters = Object.entries(master.workers);
             self.executeStats(clusters, 0);
@@ -226,13 +222,10 @@ class ClusterManager extends EventEmitter {
                     case "stats":
                         this.stats.stats.guilds += message.stats.guilds;
                         this.stats.stats.users += message.stats.users;
-                        this.stats.stats.voice += message.stats.voice;
                         this.stats.stats.totalRam += message.stats.ram;
 			this.stats.stats.totalCpu += message.stats.cpu;
 			this.stats.stats.totalVoiceConnections += message.stats.voiceConnections;
                         let ram = message.stats.ram / 1000000;
-                        this.stats.stats.exclusiveGuilds += message.stats.exclusiveGuilds;
-                        this.stats.stats.largeGuilds += message.stats.largeGuilds;
                         this.stats.stats.clusters.push({
                             cluster: worker.id,
                             shards: message.stats.shards,
@@ -240,10 +233,7 @@ class ClusterManager extends EventEmitter {
                             users: message.stats.users,
                             ram: ram,
                             cpu: message.stats.cpu,
-                            voice: message.stats.voice,
                             uptime: message.stats.uptime,
-                            exclusiveGuilds: message.stats.exclusiveGuilds,
-                            largeGuilds: message.stats.largeGuilds,
                             voiceConnections: message.stats.voiceConnections
                         });
                         this.stats.clustersCounted += 1;
@@ -259,8 +249,6 @@ class ClusterManager extends EventEmitter {
                             this.emit("stats", {
                                 guilds: this.stats.stats.guilds,
                                 users: this.stats.stats.users,
-                                exclusiveGuilds: this.stats.stats.exclusiveGuilds,
-                                largeGuilds: this.stats.stats.largeGuilds,
                                 totalRam: this.stats.stats.totalRam / 1000000,
                                 totalCpu: this.stats.stats.totalCpu,
                                 totalVoiceConnections: this.stats.stats.totalVoiceConnections,

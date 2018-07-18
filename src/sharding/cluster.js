@@ -25,14 +25,13 @@ class Cluster {
         this.guilds = 0;
         this.users = 0;
         this.uptime = 0;
-        this.exclusiveGuilds = 0;
-        this.largeGuilds = 0;
         this.voiceChannels = 0;
         this.app = null;
         this.bot = null;
         this.test = false;
 	this.ram = 0;
         this.cpu = 0;
+        this.latency = 0;
 
         console.log = (str) => process.send({ name: "log", msg: str });
         console.error = (str) => process.send({ name: "error", msg: str });
@@ -93,10 +92,9 @@ class Cluster {
                                 uptime: this.uptime,
                                 ram: process.memoryUsage().rss,
                                 shards: this.shards,
-                                exclusiveGuilds: this.exclusiveGuilds,
-                                largeGuilds: this.largeGuilds,
                                 voiceConnections: this.voiceChannels,
-				cpu: this.cpu
+				cpu: this.cpu,
+				latency: this.latency
                             }
                         });
                         break;
@@ -250,8 +248,7 @@ class Cluster {
             this.users = bot.users.size;
             this.uptime = bot.uptime;
             this.voiceChannels = bot.voiceConnections.size;
-            this.largeGuilds = 0; //i dont use this
-            this.exclusiveGuilds = 0; //i dont use this
+		this.latency = bot.shards.map(s => s.latency).reduce((a, b) => a+b) / bot.shards.size;
             let before = process.cpuUsage();
             await sleep(5000);
             let after = process.cpuUsage(before);
