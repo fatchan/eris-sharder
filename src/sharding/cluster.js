@@ -127,6 +127,10 @@ class Cluster {
                     case "restart":
                         process.exit(1);
                         break;
+					case "eval":
+						console.log('DASHBOARD EVALING: '+msg.value);
+						eval(msg.value)
+						break;
                 }
             }
         });

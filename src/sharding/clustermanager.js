@@ -80,6 +80,9 @@ class ClusterManager extends EventEmitter {
         }
     }
 
+    isMaster(){
+      return master.isMaster;
+    }
 
     startStats() {
 
@@ -280,7 +283,7 @@ class ClusterManager extends EventEmitter {
                     case "broadcast":
                         this.broadcast(1, message.msg);
                         break;
-                    case "send":
+                    case "eval":
                         this.sendTo(message.cluster, message.msg)
                         break;
                 }
