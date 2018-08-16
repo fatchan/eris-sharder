@@ -31,7 +31,6 @@ class Cluster {
         this.test = false;
 	this.ram = 0;
         this.cpu = 0;
-        this.latency = 0;
 
         console.log = (str) => process.send({ name: "log", msg: str });
         console.error = (str) => process.send({ name: "error", msg: str });
@@ -94,7 +93,6 @@ class Cluster {
                                 shards: this.shards,
                                 voiceConnections: this.voiceChannels,
 				cpu: this.cpu,
-				latency: this.latency
                             }
                         });
                         break;
@@ -252,7 +250,6 @@ class Cluster {
             this.users = bot.users.size;
             this.uptime = bot.uptime;
             this.voiceChannels = bot.voiceConnections.size;
-		this.latency = bot.shards.map(s => s.latency).reduce((a, b) => a+b) / bot.shards.size;
             let before = process.cpuUsage();
             await sleep(5000);
             let after = process.cpuUsage(before);
