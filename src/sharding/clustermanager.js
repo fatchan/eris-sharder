@@ -6,7 +6,6 @@ const EventEmitter = require('events');
 const Eris = require('eris');
 const Queue = require('../utils/queue.js');
 const pkg = require('../../package.json');
-const util = require('util');
 
 class ClusterManager extends EventEmitter {
     constructor(token, mainFile, options) {
@@ -162,21 +161,21 @@ class ClusterManager extends EventEmitter {
             if (message.name) {
                 switch (message.name) {
                 case 'log':
-                    logger.log(`Cluster ${worker.id}`, `${util.format(message.msg)}`);
+                    logger.log(`Cluster ${worker.id}`, `${message.msg}`);
                     break;
                 case 'debug':
                     if (this.options.debug) {
-                        logger.debug(`Cluster ${worker.id}`, `${util.format(message.msg)}`);
+                        logger.debug(`Cluster ${worker.id}`, `${message.msg}`);
                     }
                     break;
                 case 'info':
-                    logger.info(`Cluster ${worker.id}`, `${util.format(message.msg)}`);
+                    logger.info(`Cluster ${worker.id}`, `${message.msg}`);
                     break;
                 case 'warn':
-                    logger.warn(`Cluster ${worker.id}`, `${util.format(message.msg)}`);
+                    logger.warn(`Cluster ${worker.id}`, `${message.msg}`);
                     break;
                 case 'error':
-                    logger.error(`Cluster ${worker.id}`, `${util.format(message.msg)}`);
+                    logger.error(`Cluster ${worker.id}`, `${message.msg}`);
                     break;
                 case 'shardsStarted':
                     this.queue.queue.splice(0, 1);
@@ -449,7 +448,7 @@ class ClusterManager extends EventEmitter {
         });
     }
 
-    calculateShards(shards) {
+    async calculateShards(shards) {
         if (this.shardCount !== 0) return this.shardCount;
         if (shards === 1) {
             return shards;
